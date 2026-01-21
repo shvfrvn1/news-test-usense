@@ -1,0 +1,1 @@
+export { fetchNews, fetchArticleById as getArticleById } from './guardian'

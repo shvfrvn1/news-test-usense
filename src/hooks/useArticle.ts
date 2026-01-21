@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { fetchArticleById } from '../services/newsApi'
+import { getArticleById } from '../services/api'
 import type { GuardianArticle } from '../types/news'
 
 export const useArticle = (id: string) => {
@@ -10,7 +10,7 @@ export const useArticle = (id: string) => {
   useEffect(() => {
     setLoading(true)
 
-    fetchArticleById(id)
+    getArticleById(id)
       .then(setArticle)
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false))

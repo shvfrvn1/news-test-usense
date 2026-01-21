@@ -1,13 +1,22 @@
-export interface GuardianSearchResponse {
-  status: 'ok' | 'error';
-  userTier: string;
-  total: number;
-  startIndex: number;
-  pageSize: number;
-  currentPage: number;
-  pages: number;
-  orderBy: string;
-  results: GuardianArticle[];
+export interface FetchParams {
+  section?: string
+  query?: string
+  page?: number
+  pageSize?: number
+}
+export interface GuardianSearchResponse<T> {
+  response: {
+    status: 'ok' | 'error';
+    userTier: string;
+    total: number;
+    startIndex: number;
+    pageSize: number;
+    currentPage: number;
+    pages: number;
+    orderBy: string;
+    content?: T;
+    results?: T[];
+  }
 }
 
 export interface GuardianArticle {
