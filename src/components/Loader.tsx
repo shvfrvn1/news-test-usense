@@ -16,22 +16,13 @@ const Loader = memo(function Loader({
   }[size];
 
   return (
-    <div className="
-      flex min-h-[40vh] items-center justify-center p-6
-      text-text-secondary
-    ">
-      <div className="flex flex-col items-center gap-4">
-        <div className={`
-          ${spinnerSize} rounded-full
-          border-4 border-brand-blue/30 border-t-brand-blue
-          animate-spin
-        `} />
-        <p className="
-          text-lg font-medium
-          text-text-primary
-        ">
-          {message}
-        </p>
+    <div className="flex min-h-[50vh] items-center justify-center px-4 py-16" role="status" aria-live="polite">
+      <div className="flex flex-col items-center gap-5 text-center">
+        <div
+          className={`${spinnerSize} rounded-full border-2 border-brand-blue/20 border-t-brand-blue animate-spin`}
+          aria-hidden
+        />
+        <p className="text-sm font-medium text-text-secondary">{message}</p>
       </div>
     </div>
   );

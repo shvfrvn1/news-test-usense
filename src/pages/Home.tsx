@@ -23,15 +23,18 @@ const Home = () => {
   }
 
   return (
-    <div className="
-      max-w-7xl mx-auto p-8 grid gap-5 
-      md:grid-cols-2
-      xl:grid-cols-3"
-    >
-      {news.map((article) => (
-        <NewsCard key={article.id} article={article} />
-      ))}
-    </div>
+    <main className="min-h-screen">
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
+        <h1 className="sr-only">Latest news</h1>
+        <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {news.map((article) => (
+            <li key={article.id}>
+              <NewsCard article={article} />
+            </li>
+          ))}
+        </ul>
+      </div>
+    </main>
   )
 }
 

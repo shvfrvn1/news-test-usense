@@ -7,72 +7,60 @@ interface Props {
 }
 
 const NewsCard = memo(function NewsCard({ article }: Props) {
+  const dateFormatted = article.webPublicationDate
+    ? new Date(article.webPublicationDate).toLocaleDateString('en-GB', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+      })
+    : null
+
   return (
     <Link
       to={`/article/${encodeURIComponent(article.id)}`}
       className="
-        group block rounded-xl overflow-hidden
-        bg-background
-        border border-border-subtle
-        hover:shadow-md transition-shadow duration-200
+        group flex flex-col overflow-hidden rounded-xl
+        border border-border-subtle bg-surface
+        shadow-sm
+        hover:border-brand-blue/30 hover:shadow-md
+        transition-all duration-200
       "
     >
-      {/* image */}
-      {article.fields?.thumbnail && (
-        <div className="overflow-hidden">
+      {article.fields?.thumbnail ? (
+        <div className="relative aspect-[16/10] shrink-0 overflow-hidden bg-surface-elevated">
           <img
             src={article.fields.thumbnail}
-            alt={article.webTitle}
+            alt=""
             className="
-              w-full h-full object-cover
-              group-hover:scale-105 transition-transform duration-300
+              h-full w-full object-cover
+              transition-transform duration-300 ease-out
+              group-hover:scale-[1.02]
             "
           />
         </div>
+      ) : (
+        <div className="aspect-[16/10] shrink-0 bg-surface-elevated" aria-hidden />
       )}
 
-
-      {/* card text */}
-      <div className="p-5 flex flex-col space-y-1 h-full">
-        {/* meta */}
-        <div className="flex items-center justify-between font-light">
-
-          <span className="uppercase tracking-wide cursor-pointer">
-            {article.sectionName}
-          </span>
-
-          {article.webPublicationDate && (
-            <time className="text-text-muted">
-              {new Date(article.webPublicationDate).toLocaleString('en-GB', {
-                year: 'numeric',
-                month: 'numeric',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-                hour12: false,
-              })}
-            </time>
+      <div className="flex min-h-0 flex-1 flex-col p-4 sm:p-5">
+        <div className="mb-2 flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-text-muted">
+          <span>{article.sectionName}</span>
+          {dateFormatted && (
+            <>
+              <span aria-hidden>·</span>
+              <time dateTime={article.webPublicationDate}>{dateFormatted}</time>
+            </>
           )}
         </div>
-        {/* title */}
-        <h2 className="
-          font-bold text-lg leading-tight
-          text-text-primary
-          group-hover:text-brand-blue transition-colors duration-200
-        ">
+        <h2 className="mb-1.5 line-clamp-2 text-base font-semibold leading-snug text-text-primary transition-colors group-hover:text-brand-blue sm:text-lg">
           {article.webTitle}
         </h2>
-
-        {/* text */}
         {article.fields?.trailText && (
           <p
-            className="text-sm text-text-secondary mt-2"
-            dangerouslySetInnerHTML={{
-              __html: article.fields.trailText,
-            }}
+            className="line-clamp-2 text-sm text-text-secondary"
+            dangerouslySetInnerHTML={{ __html: article.fields.trailText }}
           />
         )}
-
       </div>
     </Link>
   )

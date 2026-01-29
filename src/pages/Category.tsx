@@ -26,44 +26,31 @@ const Category = () => {
     )
   }
 
-  const categoryTitle = section
-    ? section.toUpperCase()
-    : ""
+  const categoryTitle = section ? section.charAt(0).toUpperCase() + section.slice(1) : ''
 
   return (
-    <div className="
-      bg-background min-h-screen
-    ">
-      <div className="
-        max-w-7xl mx-auto
-        px-4 sm:px-6 lg:px-8
-        py-8 md:py-12
-      ">
-        <h1 className="
-          mb-8 md:mb-10
-          text-3xl sm:text-4xl lg:text-5xl
-          font-extrabold tracking-tight
-          text-text-primary text-center
-        ">
+    <main className="min-h-screen bg-background">
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
+        <h1 className="mb-8 text-3xl font-bold tracking-tight text-text-primary sm:mb-10 sm:text-4xl">
           {categoryTitle}
         </h1>
 
         {news.length === 0 ? (
-          <div className="
-            py-20 text-center
-            text-text-secondary text-lg
-          ">
-            No articles found in this category
+          <div className="flex min-h-[40vh] flex-col items-center justify-center rounded-2xl border border-dashed border-border-subtle bg-surface-elevated/50 py-16 text-center">
+            <p className="text-lg font-medium text-text-primary">No articles in this category</p>
+            <p className="mt-1 text-sm text-text-secondary">Check back later or try another section.</p>
           </div>
         ) : (
-          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+          <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {news.map((article: GuardianArticle) => (
-              <NewsCard key={article.id} article={article} />
+              <li key={article.id}>
+                <NewsCard article={article} />
+              </li>
             ))}
-          </div>
+          </ul>
         )}
       </div>
-    </div>
+    </main>
   )
 }
 

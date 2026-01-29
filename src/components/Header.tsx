@@ -11,85 +11,67 @@ const Header = memo(function Header() {
     <header
       className="
         sticky top-0 z-50
-        bg-background/90 backdrop-blur-sm
-        dark:bg-background-dark
+        bg-background/95 backdrop-blur-md
         border-b border-border-subtle
+        shadow-sm
         transition-colors duration-200
       "
     >
-      <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
-
-          {/* Logo */}
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex h-14 sm:h-16 items-center justify-between gap-4">
           <NavLink
             to="/"
             className="
-              text-2xl sm:text-3xl
-              font-extrabold tracking-tight
+              shrink-0 text-xl sm:text-2xl font-bold tracking-tight
               text-brand-blue
-              dark:text-brand-blue-light
-              hover:opacity-90 transition-opacity
+              hover:text-brand-blue-light
+              transition-colors
             "
           >
             News
           </NavLink>
 
-          {/* Desktop */}
-          <nav className="hidden md:flex items-center gap-1 lg:gap-6">
+          <nav className="hidden md:flex items-center gap-0.5 lg:gap-1">
             {CATEGORIES.map(category => (
               <NavLink
                 key={category.value}
                 to={category.value ? `/category/${category.value}` : '/'}
                 className={({ isActive }) =>
-                  `relative px-2 py-2.5 text-base font-medium
-                   text-text-primary
-                   dark:text-text-primary-dark
+                  `px-3 py-2.5 text-sm font-medium rounded-lg
                    transition-colors duration-150
-                   hover:text-brand-blue
-                   dark:hover:text-brand-blue-light
                    ${isActive
-                     ? 'text-brand-blue dark:text-brand-blue-light font-semibold'
-                     : ''
+                     ? 'text-brand-blue bg-brand-blue-verylight/50'
+                     : 'text-text-secondary hover:text-brand-blue hover:bg-surface-elevated'
                    }`
                 }
               >
                 {category.label}
-                <span
-                  className={`
-                    absolute bottom-0 left-0 h-0.5 w-full
-                    bg-brand-blue dark:bg-brand-blue-light
-                    scale-x-0 transition-transform duration-200 origin-left
-                  `}
-                />
               </NavLink>
             ))}
-
-            <div className="ml-6 flex items-center gap-4 pl-6 border-l border-border-subtle">
-              <SearchBar />
+            <div className="ml-4 flex items-center gap-3 pl-4 border-l border-border-subtle">
+              <div className="w-56 lg:w-64">
+                <SearchBar />
+              </div>
               <ThemeToggle />
             </div>
           </nav>
 
-          {/* Mobile */}
-          <div className="flex md:hidden items-center gap-4">
+          <div className="flex md:hidden items-center gap-2">
             <ThemeToggle />
-
             <button
+              type="button"
               onClick={() => setOpen(!open)}
-              className="
-                p-2 -mr-2
-                text-text-secondary
-                hover:text-brand-blue
-              "
-              aria-label={open ? 'Закрыть меню' : 'Открыть меню'}
+              className="p-2.5 rounded-lg text-text-secondary hover:bg-surface-elevated hover:text-text-primary transition-colors"
+              aria-label={open ? 'Close menu' : 'Open menu'}
+              aria-expanded={open}
             >
               {open ? (
-                <svg className="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               ) : (
-                <svg className="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               )}
             </button>
@@ -97,36 +79,29 @@ const Header = memo(function Header() {
         </div>
       </div>
 
-      {/* Mobile Menu */}
       {open && (
-        <div className="
-          md:hidden
-          border-t border-border-subtle
-          shadow-lg
-        ">
-          <div className="px-5 py-6 space-y-2">
+        <div className="md:hidden border-t border-border-subtle bg-surface-elevated/50">
+          <nav className="px-4 py-4 space-y-0.5" aria-label="Mobile menu">
             {CATEGORIES.map(cat => (
               <NavLink
                 key={cat.value}
                 to={cat.value ? `/category/${cat.value}` : '/'}
                 onClick={() => setOpen(false)}
                 className={({ isActive }) =>
-                  `block px-4 py-3.5 rounded-md text-lg font-medium
-                   transition-colors duration-150
+                  `block px-4 py-3 rounded-lg text-base font-medium transition-colors
                    ${isActive
-                     ? 'text-brand-blue dark:text-brand-blue-light bg-brand-blue-verylight dark:bg-brand-blue/10'
-                     : 'text-text-primary dark:text-text-primary-dark hover:text-brand-blue dark:hover:text-brand-blue-light hover:bg-surface-elevated dark:hover:bg-surface-dark-elevated'
+                     ? 'text-brand-blue bg-brand-blue-verylight/50'
+                     : 'text-text-primary hover:text-brand-blue hover:bg-surface-elevated'
                    }`
                 }
               >
                 {cat.label}
               </NavLink>
             ))}
-
-            <div className="pt-5 mt-4 border-t border-border-subtle">
+            <div className="pt-4 mt-4 border-t border-border-subtle">
               <SearchBar />
             </div>
-          </div>
+          </nav>
         </div>
       )}
     </header>

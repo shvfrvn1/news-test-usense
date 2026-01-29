@@ -28,55 +28,32 @@ const Search = () => {
 
   if (news.length === 0) {
     return (
-      <div className="
-        flex min-h-[50vh] items-center justify-center p-8
-        text-center
-      ">
-        <div className="max-w-lg">
-          <p className="
-            text-2xl font-semibold
-            text-text-primary
-            mb-4
-          ">
-            No results found
-          </p>
-          <p className="
-            text-lg
-            text-text-secondary
-          ">
-            Try adjusting your search or check for typos
+      <main className="flex min-h-[60vh] items-center justify-center px-4 py-16">
+        <div className="max-w-md rounded-2xl border border-dashed border-border-subtle bg-surface-elevated/50 p-10 text-center">
+          <p className="text-xl font-semibold text-text-primary">No results for &ldquo;{query}&rdquo;</p>
+          <p className="mt-2 text-sm text-text-secondary">
+            Try different keywords or check for typos.
           </p>
         </div>
-      </div>
+      </main>
     )
   }
 
   return (
-    <div className="
-      px-4 sm:px-6 lg:px-8 py-6 md:py-8
-      max-w-7xl mx-auto
-      bg-background
-    ">
-      <h1 className="
-        mb-6 md:mb-8
-        text-2xl sm:text-3xl lg:text-4xl
-        font-extrabold tracking-tight
-        text-text-primary
-      ">
-        Results for "{query}"
-      </h1>
-
-      <div className="
-        grid gap-6
-        sm:grid-cols-2
-        lg:grid-cols-3
-        xl:grid-cols-4
-      ">
-        {news.map((article) => (
-          <NewsCard key={article.id} article={article} />
-        ))}
+    <main className="min-h-screen bg-background">
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
+        <h1 className="mb-6 text-2xl font-bold tracking-tight text-text-primary sm:mb-8 sm:text-3xl">
+          Results for &ldquo;{query}&rdquo;
+        </h1>
+        <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {news.map((article) => (
+            <li key={article.id}>
+              <NewsCard article={article} />
+            </li>
+          ))}
+        </ul>
       </div>
-    </div>
+    </main>
   )
 }
 

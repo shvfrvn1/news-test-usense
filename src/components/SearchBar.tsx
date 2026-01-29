@@ -30,19 +30,34 @@ const SearchBar = memo(function SearchBar() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex gap-2"
+      className="flex gap-2 w-full"
+      role="search"
     >
       <input
+        type="search"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
         placeholder="Search news..."
-        className="border text-text-primary rounded px-3 py-1 text-sm w-full"
+        aria-label="Search articles"
+        className="
+          w-full min-w-0 rounded-lg border border-border-subtle
+          bg-surface px-3 py-2 text-sm text-text-primary
+          placeholder:text-text-muted
+          transition-colors
+          hover:border-brand-blue/40
+          focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20
+        "
       />
       <button
         type="submit"
-        className="bg-brand-blue text-white px-4 rounded text-sm cursor-pointer"
+        className="
+          shrink-0 rounded-lg bg-brand-blue px-4 py-2 text-sm font-medium text-white
+          hover:bg-brand-blue-light
+          focus:ring-2 focus:ring-brand-blue focus:ring-offset-2
+          transition-colors
+        "
       >
         Search
       </button>

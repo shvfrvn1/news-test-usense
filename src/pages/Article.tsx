@@ -24,91 +24,62 @@ const Article = () => {
     )
   }
 
+  const pubDate = new Date(article.webPublicationDate).toLocaleDateString('en-GB', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  })
+
   return (
-    <article className="
-      max-w-3xl mx-auto
-      px-4 py-8
-      bg-background
-      min-h-screen
-    ">
-      {/* TITLE */}
-      <h1 className="
-        mb-5 md:mb-6
-        text-2xl sm:text-3xl lg:text-4xl
-        font-extrabold tracking-tight
-        text-text-primary leading-tight
-      ">
-        {article.fields?.headline || article.webTitle}
-      </h1>
+    <article className="min-h-screen bg-background">
+      <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6 sm:py-10">
+        <header className="mb-8">
+          <p className="mb-2 text-xs font-medium uppercase tracking-wide text-text-muted">
+            <Link
+              to={`/category/${article.sectionName.toLowerCase()}`}
+              className="hover:text-brand-blue transition-colors"
+            >
+              {article.sectionName}
+            </Link>
+          </p>
+          <h1 className="text-2xl font-bold tracking-tight text-text-primary sm:text-3xl lg:text-4xl lg:leading-tight">
+            {article.fields?.headline || article.webTitle}
+          </h1>
+          <time dateTime={article.webPublicationDate} className="mt-3 block text-sm text-text-muted">
+            {pubDate}
+          </time>
+        </header>
 
-      {/* INFO */}
-      <div className="
-        mb-6 md:mb-8
-        flex flex-wrap items-center gap-4 text-sm
-        text-text-muted
-      ">
-        <time className="text-text-muted">
-          {new Date(article.webPublicationDate).toLocaleString('en-GB', {
-            year: 'numeric',
-            month: 'numeric',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: false,
-          })}
-        </time>
-        <span className="font-bold uppercase tracking-wide">
-          <Link to={`/category/${article.sectionName.toLocaleLowerCase()}`}>
-            {article.sectionName}
-          </Link>
-        </span>
-      </div>
+        {article.fields?.thumbnail && (
+          <figure className="mb-8 overflow-hidden rounded-xl shadow-md">
+            <img
+              src={article.fields.thumbnail}
+              alt=""
+              className="w-full object-cover"
+              loading="lazy"
+            />
+          </figure>
+        )}
 
-      {/* IMAGE */}
-      {article.fields?.thumbnail && (
-        <figure className="mb-8 md:mb-10">
-          <img
-            src={article.fields.thumbnail}
-            alt={article.webTitle}
-            className="
-              w-full rounded-lg shadow-md
-              object-cover
-            "
-            loading="lazy"
-          />
-        </figure>
-      )}
+        <div
+          className="article-body max-w-none text-text-primary"
+          dangerouslySetInnerHTML={{ __html: article.fields?.body || '' }}
+        />
 
-      {/* ARTICLE BODY */}
-      <div
-        className="
-          prose
-          prose-lg
-          max-w-none
-          article-body
-          text-text-primary
-        "
-        dangerouslySetInnerHTML={{
-          __html: article.fields?.body || '',
-        }}
-      />
-
-      {/* SOURCE */}
-      <div className="mt-10 pt-8 border-t border-divider">
-        <a
-          href={article.webUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="
-            inline-flex items-center gap-2
-            text-brand-blue hover:text-brand-blue-light
-            font-medium text-sm
-            transition-colors
-          "
-        >
-          Read original article on The Guardian →
-        </a>
+        <footer className="mt-12 border-t border-divider pt-8">
+          <a
+            href={article.webUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-brand-blue hover:text-brand-blue-light transition-colors"
+          >
+            Read on The Guardian
+            <span aria-hidden>→</span>
+          </a>
+        </footer>
       </div>
     </article>
   )
