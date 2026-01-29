@@ -1,1 +1,1 @@
-export { fetchNews, fetchArticleById as getArticleById } from './guardian'
+export { fetchNews, fetchArticleById } from './guardian'

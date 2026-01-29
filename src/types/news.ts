@@ -4,6 +4,7 @@ export interface FetchParams {
   page?: number
   pageSize?: number
 }
+
 export interface GuardianSearchResponse<T> {
   response: {
     status: 'ok' | 'error';
