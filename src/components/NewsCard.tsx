@@ -30,7 +30,7 @@ const NewsCard = memo(function NewsCard({ article }: Props) {
         <div className="relative aspect-[16/10] shrink-0 overflow-hidden bg-surface-elevated">
           <img
             src={article.fields.thumbnail}
-            alt=""
+            alt={article.webTitle}
             className="
               h-full w-full object-cover
               transition-transform duration-300 ease-out

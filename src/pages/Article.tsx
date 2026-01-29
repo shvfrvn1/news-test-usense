@@ -24,7 +24,7 @@ const Article = () => {
     )
   }
 
-  const pubDate = new Date(article.webPublicationDate).toLocaleDateString('en-GB', {
+  const pubDate = new Date(article.webPublicationDate).toLocaleString('en-GB', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -57,7 +57,7 @@ const Article = () => {
           <figure className="mb-8 overflow-hidden rounded-xl shadow-md">
             <img
               src={article.fields.thumbnail}
-              alt=""
+              alt={article.fields?.headline || article.webTitle}
               className="w-full object-cover"
               loading="lazy"
             />
