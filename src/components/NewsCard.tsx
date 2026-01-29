@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import type { GuardianArticle } from '../types/news'
 import { Link } from 'react-router-dom'
 
@@ -5,7 +6,7 @@ interface Props {
   article: GuardianArticle
 }
 
-const NewsCard = ({ article }: Props) => {
+const NewsCard = memo(function NewsCard({ article }: Props) {
   return (
     <Link
       to={`/article/${encodeURIComponent(article.id)}`}
@@ -75,6 +76,6 @@ const NewsCard = ({ article }: Props) => {
       </div>
     </Link>
   )
-}
+})
 
 export default NewsCard

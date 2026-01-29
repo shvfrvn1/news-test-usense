@@ -1,14 +1,16 @@
+import { memo } from 'react'
+
 interface ErrorStateProps {
   message: string | null;
   title?: string;
   onRetry?: () => void;
 }
 
-const Error = ({
+const ErrorState = memo(function ErrorState({
   message,
   title = "Something went wrong",
   onRetry,
-}: ErrorStateProps) => {
+}: ErrorStateProps) {
   return (
     <div className="
       flex min-h-[50vh] items-center justify-center p-6 text-center
@@ -46,6 +48,6 @@ const Error = ({
       </div>
     </div>
   );
-};
+})
 
-export default Error
+export default ErrorState

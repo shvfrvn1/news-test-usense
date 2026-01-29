@@ -1,28 +1,21 @@
-import { useEffect, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import { fetchNews } from '../services/index'
 import type { GuardianArticle } from '../types/news'
 
-export const useNews = (
-  section?: string,
-  query?: string
-) => {
-  const [news, setNews] = useState<GuardianArticle[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+export const useNews = (section?: string, query?: string) => {
+  const result = useQuery({
+    queryKey: ['news', section, query],
+    queryFn: async ({ signal }) => {
+      const list = await fetchNews({ section, query }, { signal })
+      return list as GuardianArticle[]
+    },
+    enabled: true,
+  })
 
-  const refetch = () => {
-    setLoading(true)
-    setError(null)
-
-    fetchNews({ section, query })
-      .then(setNews)
-      .catch((err) => setError(err.message))
-      .finally(() => setLoading(false))
+  return {
+    news: result.data ?? [],
+    loading: result.isLoading,
+    error: result.error ? (result.error as Error).message : null,
+    refetch: result.refetch,
   }
-
-  useEffect(() => {
-    refetch()
-  }, [section, query])
-
-  return { news, loading, error, refetch }
 }

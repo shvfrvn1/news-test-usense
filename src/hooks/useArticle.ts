@@ -1,25 +1,20 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import { fetchArticleById } from '../services/index'
 import type { GuardianArticle } from '../types/news'
 
 export const useArticle = (id: string) => {
-  const [article, setArticle] = useState<GuardianArticle | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const result = useQuery({
+    queryKey: ['article', id],
+    queryFn: async ({ signal }) => {
+      return fetchArticleById(id, { signal }) as Promise<GuardianArticle>
+    },
+    enabled: !!id,
+  })
 
-  const fetchArticle = useCallback(() => {
-    setLoading(true)
-    setError(null)
-
-    fetchArticleById(id)
-      .then(setArticle)
-      .catch((err) => setError(err.message))
-      .finally(() => setLoading(false))
-  }, [id])
-
-  useEffect(() => {
-    fetchArticle()
-  }, [fetchArticle])
-
-  return { article, loading, error, refetch: fetchArticle }
+  return {
+    article: result.data ?? null,
+    loading: result.isLoading,
+    error: result.error ? (result.error as Error).message : null,
+    refetch: result.refetch,
+  }
 }

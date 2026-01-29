@@ -23,16 +23,10 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const [theme, setTheme] = useState<Theme>(getInitialTheme)
 
   useEffect(() => {
-    const root = document.documentElement
-    root.classList.toggle('dark', theme === 'dark')
-  }, [])
-
-  useEffect(() => {
-    const isDark = theme === 'dark';
-    document.documentElement.classList.toggle('dark', isDark);
-
-    localStorage.setItem('theme', theme);
-  }, [theme]);
+    const isDark = theme === 'dark'
+    document.documentElement.classList.toggle('dark', isDark)
+    localStorage.setItem('theme', theme)
+  }, [theme])
 
   const toggleTheme = () => {
     setTheme(prev => (prev === 'light' ? 'dark' : 'light'))

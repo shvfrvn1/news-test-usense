@@ -5,10 +5,9 @@ import Error from '../components/Error'
 
 const Article = () => {
   const { id } = useParams<{ id: string }>()
+  const { article, loading, error, refetch } = useArticle(id ?? '')
 
   if (!id) return null
-
-  const { article, loading, error, refetch } = useArticle(id)
 
   if (loading) {
     return (

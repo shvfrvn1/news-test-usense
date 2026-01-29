@@ -1,10 +1,10 @@
-import { useState } from 'react'
+import { memo, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { CATEGORIES } from '../utils/categories'
 import SearchBar from './SearchBar'
 import ThemeToggle from './ThemeToggle'
 
-export default function Header() {
+const Header = memo(function Header() {
   const [open, setOpen] = useState(false)
 
   return (
@@ -131,4 +131,6 @@ export default function Header() {
       )}
     </header>
   )
-}
+})
+
+export default Header

@@ -1,13 +1,14 @@
-// src/components/LoadingState.tsx
+import { memo } from 'react'
+
 interface LoadingStateProps {
   message?: string;
   size?: 'sm' | 'md' | 'lg';
 }
 
-const Loader = ({ 
+const Loader = memo(function Loader({ 
   message = "Loading...", 
   size = 'lg' 
-}: LoadingStateProps) => {
+}: LoadingStateProps) {
   const spinnerSize = {
     sm: 'h-8 w-8',
     md: 'h-12 w-12',
@@ -34,6 +35,6 @@ const Loader = ({
       </div>
     </div>
   );
-};
+})
 
 export default Loader

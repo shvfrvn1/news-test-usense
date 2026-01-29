@@ -52,8 +52,8 @@ src/
 VITE_GUARDIAN_API_KEY=api_key
 ```
 
-
 TODO
+
 - Виправити неправильні імпорти - це критично
 - Додати перевірку наявності API_KEY з помилкою
 - Було б добре інтегрувати React Query
@@ -64,3 +64,30 @@ TODO
 - Додати мемоізацію компонентів
 - Створити окремий axios instance
 - Можна додати debounce для пошуку
+
+1. Імпорти та хуки
+Компонент помилки перейменовано на ErrorState у файлі (експорт залишається default, імпорт Error у сторінках не змінювався), щоб не затуляти глобальний Error.
+У Article.tsx хук useArticle викликається безумовно: useArticle(id ?? ''), перевірка if (!id) return null — після нього.
+2. Перевірка API_KEY
+Додано src/config/env.ts з getApiKey(): кидає помилку з текстом про відсутній VITE_GUARDIAN_API_KEY.
+Ключ підставляється в request interceptor в axios при кожному запиті, щоб помилка виникала при першому зверненні до API, а не при завантаженні бандлу.
+3. React Query
+У main.tsx додано QueryClientProvider з staleTime: 60_000 та retry: 1.
+useNews і useArticle переписані на useQuery (кеш, повторні запити, стан завантаження/помилки).
+4. Валідація API (Zod)
+Додано src/schemas/guardian.ts з Zod-схемами для відповіді Guardian API.
+У guardian.ts відповідь перевіряється через guardianSearchResponseSchema.safeParse(); при невідповідності кидається помилка з повідомленням валідатора.
+5. AbortController
+Сервіси fetchNews і fetchArticleById приймають опцію config?: RequestConfig з полем signal?: AbortSignal.
+Axios використовує цей signal у запитах.
+React Query передає signal у queryFn, тому запити скасовуються при зміні ключа запиту або розмонтуванні.
+6. Окремий axios instance
+Додано src/services/api.ts: створення axios.create() з baseURL, timeout, interceptor для підстановки api-key.
+Старий client.ts (fetch) видалено; Guardian використовує лише цей axios instance.
+7. Theme Context
+Прибрано дубльований useEffect: залишено один ефект з залежністю [theme], який оновлює document.documentElement.classList і localStorage.
+8. Мемоізація компонентів
+Обгорнуто в React.memo: NewsCard, SearchBar, ThemeToggle, Header, Loader, ErrorState (експорт як default без зміни імені імпорту).
+9. Debounce для пошуку
+Додано хук src/hooks/useDebouncedValue.ts.
+У SearchBar введено значення з debounce 400 ms; після зупинки введення виконується перехід на /search?q=.... Кнопка "Search" як раніше робить миттєвий перехід. На першому рендері навігація не викликається (через useRef)
