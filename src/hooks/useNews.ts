@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { fetchNews } from '../services/newsApi'
+import { fetchNews } from '../services/index'
 import type { GuardianArticle } from '../types/news'
 
 export const useNews = (
@@ -10,14 +10,19 @@ export const useNews = (
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  useEffect(() => {
+  const refetch = () => {
     setLoading(true)
+    setError(null)
 
-    fetchNews(section, query)
+    fetchNews({ section, query })
       .then(setNews)
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false))
+  }
+
+  useEffect(() => {
+    refetch()
   }, [section, query])
 
-  return { news, loading, error }
+  return { news, loading, error, refetch }
 }

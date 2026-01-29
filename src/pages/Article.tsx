@@ -8,7 +8,7 @@ const Article = () => {
 
   if (!id) return null
 
-  const { article, loading, error } = useArticle(id)
+  const { article, loading, error, refetch } = useArticle(id)
 
   if (loading) {
     return (
@@ -20,7 +20,7 @@ const Article = () => {
       <Error
         title="Failed to load article"
         message={error}
-        onRetry={() => window.location.reload()}
+        onRetry={refetch}
       />
     )
   }

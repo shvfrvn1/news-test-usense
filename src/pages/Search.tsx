@@ -8,7 +8,7 @@ const Search = () => {
   const [params] = useSearchParams()
   const query = params.get('q') || ''
 
-  const { news, loading, error } = useNews(undefined, query)
+  const { news, loading, error, refetch } = useNews(undefined, query)
 
   if (loading) {
     return (
@@ -21,7 +21,7 @@ const Search = () => {
       <Error
         title="Failed to load news"
         message={error}
-        onRetry={() => window.location.reload()}
+        onRetry={refetch}
       />
     )
   }

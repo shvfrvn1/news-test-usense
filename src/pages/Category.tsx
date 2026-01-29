@@ -8,7 +8,7 @@ import Error from '../components/Error'
 const Category = () => {
   const { section } = useParams<{ section: string }>()
 
-  const { news, loading, error } = useNews(section)
+  const { news, loading, error, refetch } = useNews(section)
 
   if (loading) {
     return (
@@ -21,7 +21,7 @@ const Category = () => {
       <Error
         title="Failed to load news"
         message={error}
-        onRetry={() => window.location.reload()}
+        onRetry={refetch}
       />
     )
   }

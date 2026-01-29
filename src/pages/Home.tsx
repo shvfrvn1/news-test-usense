@@ -5,7 +5,7 @@ import Error from '../components/Error'
 
 
 const Home = () => {
-  const { news, loading, error } = useNews()
+  const { news, loading, error, refetch } = useNews()
 
   if (loading) {
     return (
@@ -17,7 +17,7 @@ const Home = () => {
       <Error
         title="Failed to load main page"
         message={error}
-        onRetry={() => window.location.reload()}
+        onRetry={refetch}
       />
     )
   }

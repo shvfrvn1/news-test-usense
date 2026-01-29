@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { getArticleById } from '../services/api'
+import { useEffect, useState, useCallback } from 'react'
+import { fetchArticleById } from '../services/index'
 import type { GuardianArticle } from '../types/news'
 
 export const useArticle = (id: string) => {
@@ -7,14 +7,19 @@ export const useArticle = (id: string) => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  useEffect(() => {
+  const fetchArticle = useCallback(() => {
     setLoading(true)
+    setError(null)
 
-    getArticleById(id)
+    fetchArticleById(id)
       .then(setArticle)
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false))
   }, [id])
 
-  return { article, loading, error }
+  useEffect(() => {
+    fetchArticle()
+  }, [fetchArticle])
+
+  return { article, loading, error, refetch: fetchArticle }
 }
