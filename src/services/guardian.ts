@@ -1,5 +1,5 @@
 import { api, type RequestConfig } from './api'
-import { guardianSearchResponseSchema } from '../schemas/guardian'
+import { guardianSearchResponseSchema, type GuardianSearchResponseValidated } from '../schemas/guardian'
 import type { FetchParams } from '../types/news'
 import type { GuardianArticle } from '../types/news'
 
@@ -8,7 +8,7 @@ const DEFAULT_FIELDS = 'thumbnail,trailText'
 export const fetchNews = async (
   params: FetchParams = {},
   config?: RequestConfig
-): Promise<GuardianArticle[]> => {
+): Promise<GuardianSearchResponseValidated['response']> => {
   const { data } = await api.get<unknown>('/search', {
     params: {
       section: params.section,
@@ -25,7 +25,7 @@ export const fetchNews = async (
     throw new Error(`API response validation failed: ${parsed.error.message}`)
   }
 
-  return (parsed.data.response.results ?? []) as GuardianArticle[]
+  return parsed.data.response
 }
 
 export const fetchArticleById = async (

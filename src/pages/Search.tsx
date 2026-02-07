@@ -1,22 +1,31 @@
 import { useSearchParams } from 'react-router-dom'
 import { useNews } from '../hooks/useNews'
-import NewsCard from '../components/NewsCard'
 import Loader from '../components/Loader'
 import Error from '../components/Error'
+import InfiniteScroll from '../components/InfiniteScroll'
+import VirtualNewsGrid from '../components/VirtualNewsGrid'
 
 const Search = () => {
   const [params] = useSearchParams()
   const query = params.get('q') || ''
 
-  const { news, loading, error, refetch } = useNews(undefined, query)
+  const { 
+    news, 
+    loading, 
+    isFetchingNextPage, 
+    hasNextPage, 
+    error, 
+    fetchNextPage, 
+    refetch 
+  } = useNews(undefined, query)
 
-  if (loading) {
+  if (loading && news.length === 0) {
     return (
       <Loader message='Searching...' />
     )
   }
 
-  if (error) {
+  if (error && news.length === 0) {
     return (
       <Error
         title="Failed to load news"
@@ -26,7 +35,7 @@ const Search = () => {
     )
   }
 
-  if (news.length === 0) {
+  if (news.length === 0 && !loading) {
     return (
       <main className="flex min-h-[60vh] items-center justify-center px-4 py-16">
         <div className="max-w-md rounded-2xl border border-dashed border-border-subtle bg-surface-elevated/50 p-10 text-center">
@@ -45,13 +54,15 @@ const Search = () => {
         <h1 className="mb-6 text-2xl font-bold tracking-tight text-text-primary sm:mb-8 sm:text-3xl">
           Results for &ldquo;{query}&rdquo;
         </h1>
-        <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {news.map((article) => (
-            <li key={article.id}>
-              <NewsCard article={article} />
-            </li>
-          ))}
-        </ul>
+        <InfiniteScroll
+          loadMore={() => fetchNextPage()}
+          hasMore={!!hasNextPage}
+          isLoading={isFetchingNextPage}
+          error={error}
+          onRetry={() => fetchNextPage()}
+        >
+          <VirtualNewsGrid articles={news} />
+        </InfiniteScroll>
       </div>
     </main>
   )

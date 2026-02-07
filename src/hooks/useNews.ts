@@ -1,21 +1,30 @@
-import { useQuery } from '@tanstack/react-query'
+import { useInfiniteQuery } from '@tanstack/react-query'
 import { fetchNews } from '../services/index'
-import type { GuardianArticle } from '../types/news'
 
-export const useNews = (section?: string, query?: string) => {
-  const result = useQuery({
-    queryKey: ['news', section, query],
-    queryFn: async ({ signal }) => {
-      const list = await fetchNews({ section, query }, { signal })
-      return list as GuardianArticle[]
+export const useNews = (section?: string, query?: string, pageSize = 12) => {
+  const result = useInfiniteQuery({
+    queryKey: ['news', section, query, pageSize],
+    queryFn: async ({ pageParam = 1, signal }) => {
+      return await fetchNews({ section, query, page: pageParam, pageSize }, { signal })
     },
-    enabled: true,
+    getNextPageParam: (lastPage) => {
+      const currentPage = lastPage.currentPage
+      const pages = lastPage.pages
+      if (currentPage === undefined || pages === undefined) return undefined
+      return currentPage < pages ? currentPage + 1 : undefined
+    },
+    initialPageParam: 1,
   })
 
+  const news = result.data?.pages.flatMap((page) => page.results ?? []) ?? []
+
   return {
-    news: result.data ?? [],
+    news,
     loading: result.isLoading,
+    isFetchingNextPage: result.isFetchingNextPage,
+    hasNextPage: result.hasNextPage,
     error: result.error ? (result.error as Error).message : null,
+    fetchNextPage: result.fetchNextPage,
     refetch: result.refetch,
   }
 }
